@@ -38,7 +38,7 @@ Os protótipos iniciais foram criados para as seguintes telas:
 6. Tela de Gerenciamento de Campeonato
 7. Tela de Página do Campeonato (Pública)
 
-Os protótipos estão disponíveis na pasta [fase_1/prototipos_baixa_fidelidade](fase_1/prototipos_baixa_fidelidade/).
+Os protótipos estão disponíveis na pasta [fase_1/prototipos_baixa_fidelidade](https://github.com/Matari73/GRUPO-A-CCE-AS66A/tree/main/fase_1/prototipos_baixa_fidelidade).
 
 ---
 
