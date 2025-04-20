@@ -30,13 +30,30 @@ Desenvolver uma plataforma web centralizada para gerenciar campeonatos de Valora
 
 ## Protótipos de Baixa Fidelidade
 Os protótipos iniciais foram criados para as seguintes telas:
-1. Tela Inicial (Pública)
-2. Tela de Registro
-3. Tela de Login
-4. Tela de Busca
-5. Tela de Resultados de Busca
-6. Tela de Gerenciamento de Campeonato
-7. Tela de Página do Campeonato (Pública)
+
+
+![Protótipos](https://github.com/Matari73/GRUPO-A-CCE-AS66A/blob/main/fase_1/prototipos_baixa_fidelidade/PROT%C3%93TIPO_BaixaFidelidade_01.png)
+
+1. **Tela Inicial (Pública)**  
+   ![Tela Inicial](https://github.com/Matari73/GRUPO-A-CCE-AS66A/blob/main/fase_1/prototipos_baixa_fidelidade/Prot%C3%B3tipo01_Home.png)
+
+2. **Tela de Registro**
+   ![Tela de Registro](https://github.com/Matari73/GRUPO-A-CCE-AS66A/blob/main/fase_1/prototipos_baixa_fidelidade/Prot%C3%B3tipo02_Registro.png)
+
+3. **Tela de Login**  
+   ![Tela de Login](https://github.com/Matari73/GRUPO-A-CCE-AS66A/blob/main/fase_1/prototipos_baixa_fidelidade/Prot%C3%B3tipo03_Entrar.png)
+
+4. **Tela de Busca**  
+   ![Tela de Busca](https://github.com/Matari73/GRUPO-A-CCE-AS66A/blob/main/fase_1/prototipos_baixa_fidelidade/Prot%C3%B3tipo04_Busca.png)
+
+5. **Tela de Resultados de Busca**  
+   ![Tela de Resultados de Busca](https://github.com/Matari73/GRUPO-A-CCE-AS66A/blob/main/fase_1/prototipos_baixa_fidelidade/Prot%C3%B3tipo06_ResultadosdeBusca.png)
+
+6. **Tela de Gerenciamento de Campeonato**  
+   ![Tela de Gerenciamento de Campeonato](https://github.com/Matari73/GRUPO-A-CCE-AS66A/blob/main/fase_1/prototipos_baixa_fidelidade/Prot%C3%B3tipo05_GerenciamentodeCampeonato.png)
+
+7. **Tela de Página do Campeonato (Pública)**  
+   ![Tela de Página do Campeonato](https://github.com/Matari73/GRUPO-A-CCE-AS66A/blob/main/fase_1/prototipos_baixa_fidelidade/Prot%C3%B3tipo08_P%C3%A1ginadoCampeonato.png)
 
 Os protótipos estão disponíveis na pasta [fase_1/prototipos_baixa_fidelidade](https://github.com/Matari73/GRUPO-A-CCE-AS66A/tree/main/fase_1/prototipos_baixa_fidelidade).
 
