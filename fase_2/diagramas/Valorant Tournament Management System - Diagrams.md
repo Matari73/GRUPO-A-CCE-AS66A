@@ -469,8 +469,4 @@ npm run dev
   - Pedro de Oliveira Machado
   - Sérgio Alexandre Alvarenga de Almeida
 
-### Documentation
-- [Project Proposal](../fase_1/)
-- [API Documentation](https://api-docs.valorant-tournament.dev)
-- [Contributing Guidelines](CONTRIBUTING.md)
 
