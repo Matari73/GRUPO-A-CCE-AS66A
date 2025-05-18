@@ -22,89 +22,109 @@ A solução proposta pelo Grupo A é uma plataforma web para gerenciar campeonat
 
 ```mermaid
 erDiagram
-    CLIENTES {
-      INT id_cliente PK
-      VARCHAR(40) nome
-      VARCHAR(12) cpf
-      VARCHAR(12) telefone
-      VARCHAR(100) email
-      VARCHAR(255) endereco
-    }
-    SERVICOS {
-      INT id_servico PK
-      VARCHAR(45) nome_servico
-      VARCHAR(45) pacote
-      TIME duracao
-      FLOAT preco
-    }
-    FUNCIONARIOS {
-      INT id_funcionario PK
-      VARCHAR(45) nome
-    }
-    AGENDAMENTOS {
-      INT id_agendamento PK
-      INT id_cliente FK
-      INT id_servico FK
-      DATE dia
-      TIME horario
-      INT qtd_participantes
-      VARCHAR(20) status 
-      INT id_metodo_pagamento FK
-    }
-    PROCEDIMENTOS {
-      INT id_procedimento PK
-      INT id_agendamento FK
-      BOOLEAN adicional
-      VARCHAR(45) descricao_adicional
-      FLOAT valor_adicional
-      FLOAT desconto
-      FLOAT valor_final
-    }
-    PROCEDIMENTO_FUNCIONARIOS {
-      INT id_procedimento FK
-      INT id_funcionario FK
-    }
-    METODOS_PAGAMENTO {
-      INT id_metodo PK
-      VARCHAR(50) metodo_nome
-    }
-    COMISSOES {
-      INT id_comissao PK
-      INT id_funcionario FK
-      INT id_procedimento FK
-      FLOAT percentual_comissao
-      FLOAT valor_comissao
-    }
-    FEEDBACKS {
-      INT id_feedback PK
-      INT id_agendamento FK
-      INT nota 
-      TEXT comentario
-    }
-    PROMOCOES {
-      INT id_promocao PK
-      VARCHAR(100) nome_promocao
-      TEXT descricao
-      FLOAT desconto_percentual
-      DATE data_inicio
-      DATE data_fim
-    }
-    SERVICOS_PROMOCOES {
-      INT id_servico FK
-      INT id_promocao FK
+    USER ||--o{ CHAMPIONSHIP : creates
+    USER ||--o{ TEAM : manages
+    USER ||--o{ PARTICIPANT : creates
+    TEAM ||--o{ PARTICIPANT : has
+    CHAMPIONSHIP ||--o{ MATCH : has
+    CHAMPIONSHIP ||--o{ SUBSCRIPTION : receives
+    TEAM ||--o{ SUBSCRIPTION : makes
+    MATCH ||--o{ PARTICIPANT_STATISTICS : generates
+    PARTICIPANT ||--o{ PARTICIPANT_STATISTICS : participates_in
+    AGENT ||--o{ PARTICIPANT_STATISTICS : used_in
+    CHAMPIONSHIP ||--o{ CHAMPIONSHIP_STATISTICS : generates
+
+    USER {
+        int user_id
+        string name
+        string email
+        string password
+        boolean isOrganizador
     }
 
-    CLIENTES ||--o{ AGENDAMENTOS : "realiza"
-    SERVICOS ||--o{ AGENDAMENTOS : "oferece"
-    AGENDAMENTOS ||--|| PROCEDIMENTOS : "gera"
-    PROCEDIMENTOS ||--o{ PROCEDIMENTO_FUNCIONARIOS : "associa"
-    FUNCIONARIOS ||--o{ PROCEDIMENTO_FUNCIONARIOS : "atua em"
-    METODOS_PAGAMENTO ||--o{ AGENDAMENTOS : "utiliza"
-    FUNCIONARIOS ||--o{ COMISSOES : "recebe"
-    PROCEDIMENTOS ||--o{ COMISSOES : "gera"
-    AGENDAMENTOS ||--o{ FEEDBACKS : "avalia"
-    PROMOCOES ||--o{ SERVICOS_PROMOCOES : "aplica"
-    SERVICOS ||--o{ SERVICOS_PROMOCOES : "pertence"
+    TEAM {
+        int team_id
+        string name
+        int ranking
+        int user_id
+    }
+
+    PARTICIPANT {
+        int participant_id
+        string name
+        string nickname
+        datetime birth_date
+        int phone
+        int team_id
+        boolean is_COACH
+        int user_id
+    }
+
+    CHAMPIONSHIP {
+        int championship_id
+        string name
+        string description
+        string format
+        date start_date
+        date end_date
+        string location
+        string status
+        int user_id
+    }
+
+    MATCH {
+        int match_id
+        int championship_id
+        int teamA_id
+        int teamB_id
+        date date
+        string stage
+        int winner_team_id
+        dict score
+        string map
+    }
+
+    SUBSCRIPTION {
+        int subscription_id
+        int championship_id
+        int team_id
+        date subscription_date
+        string status
+    }
+
+    PARTICIPANT_STATISTICS {
+        int statistic_id
+        int match_id
+        int participant_id
+        int agent_id
+        int kills
+        int assists
+        int deaths
+        int spike_plants
+        int spike_defuses
+        boolean MVP
+        boolean first_kill
+        boolean first_defuse
+    }
+
+    AGENT {
+        int agent_id
+        string name
+    }
+
+    CHAMPIONSHIP_STATISTICS {
+        int statistic_id
+        int championship_id
+        int participant_id
+        int team_id
+        int kills
+        int assists
+        int deaths
+        int spike_plants
+        int spike_defuses
+        int MVPs
+        int first_kills
+    }
 ```
 
 ## Diagrama de Arquitetura
