@@ -436,9 +436,9 @@ git clone https://github.com/Pedroooxx/frontend-grupo-a-cce
 
 # Backend setup
 cd Backend-CCE-AS66A
-npm install
 cp .env.example .env
-npm run dev
+docker compose down
+docker compose up --build
 
 # Frontend setup
 cd ../frontend-grupo-a-cce
