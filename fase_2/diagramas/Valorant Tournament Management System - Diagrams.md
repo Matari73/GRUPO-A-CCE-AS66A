@@ -404,43 +404,54 @@ flowchart LR
 ## Technology Stack
 
 ### Frontend Architecture
-- **Framework:** Next.js 14 with TypeScript
-- **Styling:** Tailwind CSS + HeadlessUI
-- **State Management:** React Query + Context API
-- **Form Handling:** React Hook Form + Zod
-- **Authentication:** NextAuth.js + JWT
+- **Framework:** Next.js v15.3.2  
+- **Library:** React v19.0.0 + React-DOM v19.0.0  
+- **Styling:** Tailwind CSS v4.1.5 + PostCSS v8.5.3  
+- **Linting:** ESLint v9.x + `eslint-config-next` v15.3.2  
+- **TypeScript:** v5.x  
+- **Package Manager:** npm
 
 ### Backend Architecture
-- **Runtime:** Node.js 20.x
-- **Framework:** Express.js
-- **ORM:** Sequelize with PostgreSQL
-- **Security:** JWT + bcrypt
-- **API Docs:** Swagger/OpenAPI
+- **Runtime:** Node.js v20.x (ESM)  
+- **Framework:** Express.js v5.1.0  
+- **ORM:** Sequelize v6.37.7 with `pg` v8.15.6 + `pg-hstore` v2.3.4  
+- **Auth & Security:** `jsonwebtoken` v9.0.2 + `bcryptjs` v3.0.2  
+- **Validation:** Zod v3.24.4  
+- **Env Management:** dotenv v16.5.0  
+- **Dev Tooling:** nodemon v3.1.10
 
 ## Development Setup
 
 ### Prerequisites
 ```bash
 # Required versions
-node >= 20.x
-npm >= 9.x
-// TODO implement docker implementation version
-postgresql >= 15.x
+node >= 20.0.0
+npm  >= 9.0.0
+postgresql >= 15.0
+
 ```
 
 ### Quick Start
-```bash
+
 # Clone repositories
+
+```bash
 git clone https://github.com/Matari73/Backend-CCE-AS66A
 git clone https://github.com/Pedroooxx/frontend-grupo-a-cce
+```
 
 # Backend setup
+```bash
+
 cd Backend-CCE-AS66A
 cp .env.example .env
 docker compose down
 docker compose up --build
+```
 
 # Frontend setup
+
+```bash
 cd ../frontend-grupo-a-cce
 npm install
 cp .env.example .env.local
