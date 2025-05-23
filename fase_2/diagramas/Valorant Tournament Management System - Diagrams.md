@@ -19,9 +19,11 @@
   - [Development Setup](#development-setup)
     - [Prerequisites](#prerequisites)
     - [Quick Start](#quick-start)
+- [Clone repositories](#clone-repositories)
+- [Backend setup](#backend-setup)
+- [Frontend setup](#frontend-setup)
   - [Team \& Documentation](#team--documentation)
     - [Development Team](#development-team)
-    - [Documentation](#documentation)
 
 ## Overview
 A comprehensive web platform for managing Valorant tournaments, developed as part of the CCE (Specific Competence Certification) course at UTFPR.
@@ -136,7 +138,6 @@ erDiagram
         string name
         string email
         string password
-        boolean isOrganizador
     }
 
     TEAM {
@@ -239,7 +240,6 @@ classDiagram
         +string name
         +string email
         +string password
-        +boolean isOrganizer
         +Championship createChampionship()
         +Team createTeam()
         +Participant createParticipant()

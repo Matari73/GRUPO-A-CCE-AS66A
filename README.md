@@ -39,7 +39,6 @@ erDiagram
         string name
         string email
         string password
-        boolean isOrganizador
     }
 
     TEAM {
