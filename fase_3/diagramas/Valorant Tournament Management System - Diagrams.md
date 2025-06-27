@@ -9,18 +9,17 @@
   - [Architecture \& Design](#architecture--design)
     - [System Architecture](#system-architecture)
     - [Entity-Relationship Diagram](#entity-relationship-diagram)
-    - [Data Flow](#data-flow)
-    - [Key Relationships](#key-relationships)
+    - [Class Diagram](#class-diagram)
+    - [Data Flow Diagram](#data-flow-diagram)
   - [Technology Stack](#technology-stack)
   - [Development Setup](#development-setup)
   - [Team \& Documentation](#team--documentation)
 
 ## Overview
 A comprehensive platform for managing Valorant tournaments with:
-- User authentication and team management
+- User authentication, team and players management 
 - Tournament creation and bracket generation
 - Match scheduling and statistics tracking
-- Performance analytics and reporting
 
 ## Architecture & Design
 
@@ -178,7 +177,6 @@ erDiagram
         int spike_plants
         int spike_defuses
         boolean MVP
-        boolean first_kill
         float kda
         int average_combat_score
         int total_score
@@ -231,8 +229,158 @@ erDiagram
     %% Relacionamentos Agent
     Agent ||--o{ ParticipantStatistics : "usado_em"
 ```
+### Class Diagram 
+```mermaid
+classDiagram
+    direction LR
 
-### Data Flow
+    class User {
+        +int userId
+        +string name
+        +string email
+        +string password
+        +List~Championship~ championships
+        +List~Team~ teams
+        +List~Participant~ participants
+        +createChampionship()
+        +createTeam()
+        +createParticipant()
+    }
+
+    class Team {
+        +int teamId
+        +string name
+        +int userId
+        +List~Participant~ participants
+        +List~Subscription~ subscriptions
+        +List~ChampionshipStatistics~ statistics
+        +addParticipant()
+        +subscribeToChampionship()
+    }
+
+    class Participant {
+        +int participantId
+        +string name
+        +string nickname
+        +date birthDate
+        +string phone
+        +boolean isCoach
+        +int teamId
+        +int userId
+        +List~ParticipantStatistics~ matchStatistics
+        +List~ChampionshipStatistics~ championshipStatistics
+    }
+
+    class Championship {
+        +int championshipId
+        +string name
+        +string description
+        +string format
+        +date startDate
+        +date endDate
+        +string location
+        +string status
+        +string prize
+        +int userId
+        +List~Match~ matches
+        +List~Subscription~ subscriptions
+        +List~ChampionshipStatistics~ statistics
+        +scheduleMatch()
+        +addSubscription()
+    }
+
+    class Match {
+        +int matchId
+        +int championshipId
+        +int teamAId
+        +int teamBId
+        +date date
+        +string stage
+        +string bracket
+        +int winnerTeamId
+        +jsonb score
+        +string map
+        +string status
+        +int nextMatchId
+        +List~ParticipantStatistics~ statistics
+        +setWinner()
+        +setNextMatch()
+    }
+
+    class Subscription {
+        +int subscriptionId
+        +int championshipId
+        +int teamId
+        +date subscriptionDate
+        +confirm()
+        +cancel()
+    }
+
+    class Agent {
+        +int agentId
+        +string name
+        +List~ParticipantStatistics~ statistics
+    }
+
+    class ParticipantStatistics {
+        +int statisticId
+        +int matchId
+        +int teamId
+        +int participantId
+        +int agentId
+        +int kills
+        +int assists
+        +int deaths
+        +int spikePlants
+        +int spikeDefuses
+        +boolean mvp
+        +float kda
+        +int averageCombatScore
+        +int totalScore
+        +calculateKDA()
+    }
+
+    class ChampionshipStatistics {
+        +int statisticId
+        +int championshipId
+        +int participantId
+        +int teamId
+        +int kills
+        +int assists
+        +int deaths
+        +int spikePlants
+        +int spikeDefuses
+        +int mvps
+        +int firstKills
+        +updateStats()
+    }
+
+    %% Relacionamentos
+    User "1" --> "0..*" Championship : cria
+    User "1" --> "0..*" Team : possui
+    User "1" --> "0..*" Participant : registra
+    
+    Team "1" --> "0..*" Participant : possui
+    Team "1" --> "0..*" Subscription : inscreve-se
+    Team "1" --> "0..*" ChampionshipStatistics : possui
+    
+    Championship "1" --> "0..*" Match : contém
+    Championship "1" --> "0..*" Subscription : recebe
+    Championship "1" --> "0..*" ChampionshipStatistics : gera
+    
+    Match "1" --> "1" Team : TeamA
+    Match "1" --> "1" Team : TeamB
+    Match "1" --> "0..1" Team : Winner
+    Match "1" --> "0..*" ParticipantStatistics : gera
+    Match "1" --> "0..1" Match : nextMatch
+    
+    Participant "1" --> "0..*" ParticipantStatistics : possui
+    Participant "1" --> "0..*" ChampionshipStatistics : possui
+    
+    Agent "1" --> "0..*" ParticipantStatistics : usado_em
+
+```
+### Data Flow Diagram
 
 ```mermaid
 sequenceDiagram
@@ -257,77 +405,54 @@ sequenceDiagram
     Routes-->>Client: HTTP Response
 ```
 
-### Key Relationships
-
-### 1. **User** (Usuário Central)
-
-- Cria e gerencia **Championships**
-- Possui **Teams**
-- Registra **Participants**
-
-### 2. **Championship** (Campeonato)
-
-- Contém múltiplas **Matches**
-- Recebe **Subscriptions** de teams
-- Gera **ChampionshipStatistics**
-
-### 3. **Team** (Equipe)
-
-- Possui múltiplos **Participants**
-- Participa de **Championships** via **Subscription**
-- Joga **Matches** como TeamA, TeamB ou Winner
-
-### 4. **Match** (Partida)
-
-- Liga dois **Teams** (TeamA e TeamB)
-- Pode ter um **Winner Team**
-- Gera **ParticipantStatistics**
-- Pode referenciar uma **próxima partida** (bracket system)
-
-### 5. **Participant** (Participante)
-
-- Pertence a um **Team**
-- Possui **ParticipantStatistics** por partida
-- Possui **ChampionshipStatistics** agregadas
-
-### 6. **Statistics** (Estatísticas)
-
-- **ParticipantStatistics**: Estatísticas por partida
-- **ChampionshipStatistics**: Estatísticas agregadas por campeonato
-
-### 7. **Agent** (Agente do Valorant)
-
-- Utilizado nas **ParticipantStatistics**
-- Representa os personagens jogáveis
-
-## Tipos de Relacionamento
-
-- **1:N** - Um para muitos (ex: User → Teams)
-- **N:M** - Muitos para muitos via tabela intermediária (Team ↔ Championship via Subscription)
-- **Self-Reference** - Autoreferência (Match → next_match)
-- **Multiple References** - Múltiplas referências para a mesma tabela (Match → Team como TeamA, TeamB, Winner)
 
 ## Technology Stack
 
-| Layer          | Technologies                          |
-|----------------|---------------------------------------|
-| **Frontend**   | Next.js, Tailwind CSS, React Hook Form|
-| **Backend**    | Express.js, Sequelize ORM             |
-| **Database**   | PostgreSQL                            |
-| **DevOps**     | Docker, CI/CD pipelines               |
+### Frontend Architecture
+- **Framework:** Next.js v15.3.2  
+- **Library:** React v19.0.0 + React-DOM v19.0.0  
+- **Styling:** Tailwind CSS v4.1.5 + PostCSS v8.5.3  
+- **Linting:** ESLint v9.x + `eslint-config-next` v15.3.2  
+- **TypeScript:** v5.x  
+- **Package Manager:** npm
+
+### Backend Architecture
+- **Runtime:** Node.js v20.x (ESM)  
+- **Framework:** Express.js v5.1.0  
+- **ORM:** Sequelize v6.37.7 with `pg` v8.15.6 + `pg-hstore` v2.3.4  
+- **Auth & Security:** `jsonwebtoken` v9.0.2 + `bcryptjs` v3.0.2  
+- **Validation:** Zod v3.24.4  
+- **Env Management:** dotenv v16.5.0  
+- **Dev Tooling:** nodemon v3.1.10
 
 ## Development Setup
 
-```bash
-# Backend
-docker compose up --build
+### Quick Start
 
-# Frontend
-npm install && npm run dev
+# Clone repositories
+
+```bash
+git clone https://github.com/Matari73/Backend-CCE-AS66A
+git clone https://github.com/Pedroooxx/frontend-grupo-a-cce
 ```
 
-## Team & Documentation
-- **Backend Team**: Mariana, Giovana, Italo
+# Backend setup
+```bash
+cd Backend-CCE-AS66A
+cp .env.example .env
+docker compose down
+docker compose up --build
+```
+
+# Frontend setup
+
+```bash
+cd ../frontend-grupo-a-cce
+npm install
+cp .env.example .env.local
+npm run dev
+```
+## Team 
+- **Backend Team**: Mariana, Giovana, Ítalo
 - **Frontend Team**: Pedro, Sérgio
-- **API Docs**: [Swagger UI](#) | [Postman Collection](#)
 ```

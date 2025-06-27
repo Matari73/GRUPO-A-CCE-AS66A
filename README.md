@@ -11,7 +11,7 @@ A solução proposta pelo Grupo A é uma plataforma web para gerenciar campeonat
 
 - Cadastro e Gerenciamento: Registro de jogadores, equipes e campeonatos.
 - Gestão de Campeonatos: Configuração de torneios com diferentes formatos (eliminatória simples e dupla).
-- Automatização e Relatórios: Classificação automática e visualizações com dashboards interativos.
+- Automatização e Paineis: Classificação automática (sistema de chaveamento) e paineis com os dados estatísticos do andamento do campeonato.
 - Interfaces Diferenciadas: Áreas administrativas e públicas voltadas para organizadores e fãs.
 
 **Repositórios Relacionados:**
@@ -22,45 +22,32 @@ A solução proposta pelo Grupo A é uma plataforma web para gerenciar campeonat
 
 ```mermaid
 erDiagram
-    USER ||--o{ CHAMPIONSHIP : creates
-    USER ||--o{ TEAM : manages
-    USER ||--o{ PARTICIPANT : creates
-    TEAM ||--o{ PARTICIPANT : has
-    CHAMPIONSHIP ||--o{ MATCH : has
-    CHAMPIONSHIP ||--o{ SUBSCRIPTION : receives
-    TEAM ||--o{ SUBSCRIPTION : makes
-    MATCH ||--o{ PARTICIPANT_STATISTICS : generates
-    PARTICIPANT ||--o{ PARTICIPANT_STATISTICS : participates_in
-    AGENT ||--o{ PARTICIPANT_STATISTICS : used_in
-    CHAMPIONSHIP ||--o{ CHAMPIONSHIP_STATISTICS : generates
-
-    USER {
-        int user_id
+    User {
+        int user_id PK
         string name
-        string email
+        string email UK
         string password
     }
-
-    TEAM {
-        int team_id
-        string name
-        int ranking
-        int user_id
+    
+    Team {
+        int team_id PK
+        string name UK
+        int user_id FK
     }
-
-    PARTICIPANT {
-        int participant_id
+    
+    Participant {
+        int participant_id PK
         string name
         string nickname
-        datetime birth_date
-        int phone
-        int team_id
-        boolean is_COACH
-        int user_id
+        date birth_date
+        string phone
+        int team_id FK
+        boolean is_coach
+        int user_id FK
     }
-
-    CHAMPIONSHIP {
-        int championship_id
+    
+    Championship {
+        int championship_id PK
         string name
         string description
         string format
@@ -68,54 +55,59 @@ erDiagram
         date end_date
         string location
         string status
-        int user_id
+        string prize
+        int user_id FK
     }
-
-    MATCH {
-        int match_id
-        int championship_id
-        int teamA_id
-        int teamB_id
+    
+    Match {
+        int match_id PK
+        int championship_id FK
+        int teamA_id FK
+        int teamB_id FK
         date date
         string stage
-        int winner_team_id
-        dict score
+        enum bracket
+        int winner_team_id FK
+        jsonb score
         string map
-    }
-
-    SUBSCRIPTION {
-        int subscription_id
-        int championship_id
-        int team_id
-        date subscription_date
         string status
+        int next_match_id FK
     }
-
-    PARTICIPANT_STATISTICS {
-        int statistic_id
-        int match_id
-        int participant_id
-        int agent_id
+    
+    Subscription {
+        int subscription_id PK
+        int championship_id FK
+        int team_id FK
+        date subscription_date
+    }
+    
+    Agent {
+        int agent_id PK
+        string name
+    }
+    
+    ParticipantStatistics {
+        int statistic_id PK
+        int match_id FK
+        int team_id FK
+        int participant_id FK
+        int agent_id FK
         int kills
         int assists
         int deaths
         int spike_plants
         int spike_defuses
         boolean MVP
-        boolean first_kill
-        boolean first_defuse
+        float kda
+        int average_combat_score
+        int total_score
     }
-
-    AGENT {
-        int agent_id
-        string name
-    }
-
-    CHAMPIONSHIP_STATISTICS {
-        int statistic_id
-        int championship_id
-        int participant_id
-        int team_id
+    
+    ChampionshipStatistics {
+        int statistic_id PK
+        int championship_id FK
+        int participant_id FK
+        int team_id FK
         int kills
         int assists
         int deaths
@@ -124,6 +116,39 @@ erDiagram
         int MVPs
         int first_kills
     }
+
+    %% Relacionamentos User
+    User ||--o{ Championship : "cria"
+    User ||--o{ Team : "possui"
+    User ||--o{ Participant : "registra"
+    
+    %% Relacionamentos Team
+    Team ||--o{ Participant : "possui"
+    Team ||--o{ Subscription : "inscreve-se"
+    Team ||--o{ ChampionshipStatistics : "possui"
+    
+    %% Relacionamentos Championship
+    Championship ||--o{ Match : "contém"
+    Championship ||--o{ Subscription : "recebe"
+    Championship ||--o{ ChampionshipStatistics : "gera"
+    
+    %% Relacionamentos Match
+    Match }o--|| Team : "TeamA"
+    Match }o--|| Team : "TeamB"
+    Match }o--o| Team : "Winner"
+    Match ||--o{ ParticipantStatistics : "gera"
+    Match }o--o| Match : "next_match"
+    
+    %% Relacionamentos Subscription (Many-to-Many)
+    Team ||--o{ Subscription : ""
+    Championship ||--o{ Subscription : ""
+    
+    %% Relacionamentos Participant
+    Participant ||--o{ ParticipantStatistics : "possui"
+    Participant ||--o{ ChampionshipStatistics : "possui"
+    
+    %% Relacionamentos Agent
+    Agent ||--o{ ParticipantStatistics : "usado_em"
 ```
 
 ## Diagrama de Arquitetura
